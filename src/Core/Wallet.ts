@@ -79,7 +79,7 @@ export default class Wallet {
 
     protected static encodeMnemonic(mnemonic : string, password : string) : string
     {
-        return CryptoJS.HmacSHA256(mnemonic, password).toString();
+        return CryptoJS.HmacSHA512(mnemonic, password).toString();
     }
 
     public static async createWallet() : Promise<CreatedWalletData>

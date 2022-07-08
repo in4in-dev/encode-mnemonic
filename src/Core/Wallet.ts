@@ -3,31 +3,28 @@ import Bip32 from "./Bip32";
 import * as Bip39 from "bip39";
 import CryptoJS from "crypto-js";
 import WalletInfoInterface from "./Interfaces/WalletInfoInterface";
-import TronWallet from "./Wallets/TronWallet";
+import TronWallet from "./Wallets/Tron/TronWallet";
+import EthWallet from "./Wallets/Eth/EthWallet";
 
 export default class Wallet {
 
     public privateKey : string;
     public trx : TronWallet;
-    // public eth;
+    public eth : EthWallet;
     // public bsc;
 
     public constructor(privateKey : string) {
         this.privateKey = privateKey;
 
         this.trx = new TronWallet(privateKey);
+        this.eth = new EthWallet(privateKey);
     }
 
     public getBscAddress() : string
     {
-        return this.getEthAddress();
+        // return this.getEthAddress();
+        return '';
     }
-
-    public getEthAddress() : string
-    {
-        return (new Web3).eth.accounts.privateKeyToAccount(this.privateKey).address;
-    }
-
 
     public static generateMnemonic() : string
     {
@@ -93,7 +90,7 @@ export default class Wallet {
             privateKey : wallet.privateKey,
             trxAddress : wallet.trx.address,
             bscAddress : wallet.getBscAddress(),
-            ethAddress : wallet.getEthAddress()
+            ethAddress : wallet.eth.address
         }
 
     }
@@ -110,7 +107,7 @@ export default class Wallet {
             privateKey : wallet.privateKey,
             trxAddress : wallet.trx.address,
             bscAddress : wallet.getBscAddress(),
-            ethAddress : wallet.getEthAddress()
+            ethAddress : wallet.eth.address
         }
 
     }

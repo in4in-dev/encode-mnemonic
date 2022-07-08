@@ -1,4 +1,5 @@
-import Wallet20Interface from "../Interfaces/Wallet20Interface";
+import Wallet20Interface from "../../Interfaces/Wallet20Interface";
+import TronContract from "./TronContract";
 let TronWeb = require('tronweb');
 
 export default class TronWallet implements Wallet20Interface
@@ -32,13 +33,9 @@ export default class TronWallet implements Wallet20Interface
 
     }
 
-    public async getContract(address : string) : Promise<any>
+    protected getTrxContract(contract : TronContract) : any
     {
-
-        let contract = await this.tronWeb.trx.getContract(address);
-
-        return this.tronWeb.contract(contract.abi.entrys, address);
-
+        return this.tronWeb.contract(contract.abi.entrys, contract.address);
     }
 
     public async send(amount: number, toAddress: string) : Promise<string>
@@ -50,12 +47,12 @@ export default class TronWallet implements Wallet20Interface
 
     }
 
-    public async sendToken(contractAddress : string, amount : number, toAddress : string) : Promise<string>
+    public async sendToken(contract : TronContract, amount : number, toAddress : string) : Promise<string>
     {
 
-        let contract = await this.getContract(contractAddress);
+        let contractTrx = this.getTrxContract(contract);
 
-        return contract.methods.transfer(toAddress, amount * 1000000).send();
+        return contractTrx.methods.transfer(toAddress, amount * 1000000).send();
 
     }
 
@@ -66,12 +63,12 @@ export default class TronWallet implements Wallet20Interface
         return balance / 1000000;
     }
 
-    public async getBalanceToken(contractAddress : string): Promise<number>
+    public async getBalanceToken(contract : TronContract): Promise<number>
     {
 
-        let contract = await this.getContract(contractAddress);
+        let contractTrx = await this.getTrxContract(contract);
 
-        let balance = await contract.balanceOf(this.address).call();
+        let balance = await contractTrx.balanceOf(this.address).call();
 
         return +balance.toString() / 1000000;
 

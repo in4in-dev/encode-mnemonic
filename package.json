@@ -8,10 +8,10 @@
     "web3": "^1.7.4"
   },
   "devDependencies": {
-    "@types/node": "^18.0.3",
     "@types/bip32": "^2.0.0",
     "@types/bip39": "^3.0.0",
     "@types/crypto-js": "^4.1.1",
+    "@types/node": "^18.0.3",
     "@types/web3": "^1.2.2"
   }
 }

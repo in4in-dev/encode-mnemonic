@@ -1,22 +1,21 @@
 import Web3 from 'web3';
 import Bip32 from "./Bip32";
 import * as Bip39 from "bip39";
-import CreatedWalletData from "./CreatedWalletData";
 import CryptoJS from "crypto-js";
-
-let TronWeb = require('tronweb');
+import WalletInfoInterface from "./Interfaces/WalletInfoInterface";
+import TronWallet from "./Wallets/TronWallet";
 
 export default class Wallet {
 
     public privateKey : string;
+    public trx : TronWallet;
+    // public eth;
+    // public bsc;
 
     public constructor(privateKey : string) {
         this.privateKey = privateKey;
-    }
 
-    public getTrxAddress() : string
-    {
-        return TronWeb.address.fromPrivateKey(this.privateKey);
+        this.trx = new TronWallet(privateKey);
     }
 
     public getBscAddress() : string
@@ -82,7 +81,7 @@ export default class Wallet {
         return CryptoJS.HmacSHA512(mnemonic, password).toString();
     }
 
-    public static async createWallet() : Promise<CreatedWalletData>
+    public static async createWallet() : Promise<WalletInfoInterface>
     {
 
         let mnemonic = this.generateMnemonic();
@@ -92,14 +91,14 @@ export default class Wallet {
         return {
             mnemonic,
             privateKey : wallet.privateKey,
-            trxAddress : wallet.getTrxAddress(),
+            trxAddress : wallet.trx.address,
             bscAddress : wallet.getBscAddress(),
             ethAddress : wallet.getEthAddress()
         }
 
     }
 
-    public static async createProtectedWallet(password : string) : Promise<CreatedWalletData>
+    public static async createProtectedWallet(password : string) : Promise<WalletInfoInterface>
     {
 
         let mnemonic = this.generateMnemonic();
@@ -109,7 +108,7 @@ export default class Wallet {
         return {
             mnemonic,
             privateKey : wallet.privateKey,
-            trxAddress : wallet.getTrxAddress(),
+            trxAddress : wallet.trx.address,
             bscAddress : wallet.getBscAddress(),
             ethAddress : wallet.getEthAddress()
         }

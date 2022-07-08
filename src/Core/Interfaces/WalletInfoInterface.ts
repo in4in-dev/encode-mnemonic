@@ -1,4 +1,4 @@
-export default interface CreatedWalletData{
+export default interface WalletInfoInterface{
     mnemonic : string,
     privateKey : string,
     trxAddress : string,

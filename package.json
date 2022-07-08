@@ -1,0 +1,17 @@
+{
+  "dependencies": {
+    "bip32": "^3.0.1",
+    "bip39": "^3.0.4",
+    "crypto-js": "^4.1.1",
+    "tiny-secp256k1": "^2.2.1",
+    "tronweb": "^4.2.0",
+    "web3": "^1.7.4"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.3",
+    "@types/bip32": "^2.0.0",
+    "@types/bip39": "^3.0.0",
+    "@types/crypto-js": "^4.1.1",
+    "@types/web3": "^1.2.2"
+  }
+}

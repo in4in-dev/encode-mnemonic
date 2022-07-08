@@ -1,10 +1,10 @@
 import Contract20Interface from "./Contract20Interface";
 
-export default interface Wallet20Interface
+export default interface Wallet20Interface<Contract extends Contract20Interface>
 {
-    sendToken(contract : Contract20Interface, amount : number, toAddress : string) : Promise<string>;
+    sendToken(contract : Contract, amount : number, toAddress : string) : Promise<string>;
     send(amount : number, toAddress : string) : Promise<string>;
 
-    getBalanceToken(contract : Contract20Interface) : Promise<number>;
+    getBalanceToken(contract : Contract) : Promise<number>;
     getBalance() : Promise<number>;
 }

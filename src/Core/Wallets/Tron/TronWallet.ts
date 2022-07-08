@@ -2,7 +2,7 @@ import Wallet20Interface from "../../Interfaces/Wallet20Interface";
 import TronContract from "./TronContract";
 let TronWeb = require('tronweb');
 
-export default class TronWallet implements Wallet20Interface
+export default class TronWallet implements Wallet20Interface<TronContract>
 {
 
     public privateKey : string;
@@ -41,7 +41,7 @@ export default class TronWallet implements Wallet20Interface
     public async send(amount: number, toAddress: string) : Promise<string>
     {
 
-        let transaction = await this.tronWeb.trx.sendTransaction(toAddress, amount * 1000000);
+        let transaction = await this.tronWeb.trx.sendTransaction(toAddress, Math.floor(amount * 1000000));
 
         return transaction.transaction.txID;
 
@@ -52,7 +52,7 @@ export default class TronWallet implements Wallet20Interface
 
         let contractTrx = this.getTrxContract(contract);
 
-        return contractTrx.methods.transfer(toAddress, amount * 1000000).send();
+        return contractTrx.methods.transfer(toAddress, Math.floor(amount * 1000000)).send();
 
     }
 

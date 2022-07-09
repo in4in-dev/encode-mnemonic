@@ -7,4 +7,7 @@ export default interface Wallet20Interface<Contract extends Contract20Interface>
 
     getBalanceToken(contract : Contract) : Promise<number>;
     getBalance() : Promise<number>;
+
+    sendTransaction(transaction : any) : Promise<string>;
+
 }

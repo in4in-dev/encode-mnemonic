@@ -35,24 +35,52 @@ export default class TronWallet implements Wallet20Interface<TronContract>
 
     protected getTrxContract(contract : TronContract) : any
     {
-        return this.tronWeb.contract(contract.abi.entrys, contract.address);
+        return this.tronWeb.contract(contract.abi, contract.address);
+    }
+
+    public async sendTransaction(transaction : any) : Promise<string>
+    {
+
+        let signedTransaction = await this.tronWeb.trx.sign(transaction, this.privateKey);
+        let result = await this.tronWeb.trx.sendRawTransaction(signedTransaction);
+
+        return result.txid;
+
     }
 
     public async send(amount: number, toAddress: string) : Promise<string>
     {
 
-        let transaction = await this.tronWeb.trx.sendTransaction(toAddress, Math.floor(amount * 1000000));
+        let transaction = await this.tronWeb.transactionBuilder.sendTrx(
+            toAddress,
+            Math.floor(amount * 1000000)
+        );
 
-        return transaction.transaction.txID;
+        return this.sendTransaction(transaction);
 
     }
 
     public async sendToken(contract : TronContract, amount : number, toAddress : string) : Promise<string>
     {
 
-        let contractTrx = this.getTrxContract(contract);
+        let transaction = await this.tronWeb.transactionBuilder.triggerSmartContract(
+            contract.address,
+            'transfer(address,uint256)',
+            {},
+            [
+                {
+                    type : 'address',
+                    value : toAddress
+                },
+                {
+                    type : 'uint256',
+                    value : Math.floor(amount * 1000000)
+                }
+            ],
+            this.address
+        );
 
-        return contractTrx.methods.transfer(toAddress, Math.floor(amount * 1000000)).send();
+        return this.sendTransaction(transaction.transaction);
 
     }
 
@@ -68,7 +96,7 @@ export default class TronWallet implements Wallet20Interface<TronContract>
 
         let contractTrx = await this.getTrxContract(contract);
 
-        let balance = await contractTrx.balanceOf(this.address).call();
+        let balance = await contractTrx.methods.balanceOf(this.address).call();
 
         return +balance.toString() / 1000000;
 

@@ -13,6 +13,6 @@
     "noImplicitAny": true,
     "esModuleInterop": true,
     "declaration": true,
-    "moduleResolution": "Node"
+    "moduleResolution": "node"
   }
 }

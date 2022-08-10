@@ -12,6 +12,29 @@
     "@types/bip39": "^3.0.0",
     "@types/crypto-js": "^4.1.1",
     "@types/node": "^18.0.3",
-    "@types/web3": "^1.2.2"
-  }
+    "@types/web3": "^1.2.2",
+    "typescript": "^4.7.4"
+  },
+  "name": "encode-mnemonic-wallet",
+  "description": "Even if your phrase is stolen from you, it will be useless without a password.",
+  "version": "1.0.0",
+  "main": "public/index.js",
+  "module": "public/index.js",
+  "umd:main": "public/index.js",
+  "scripts": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/in4in-dev/encode-mnemonic.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/in4in-dev/encode-mnemonic/issues"
+  },
+  "homepage" : "https://github.com/in4in-dev/encode-mnemonic#readme",
+  "files" : ["public"],
+  "prepare" : "tsc",
+  "types": "public/index.d.ts"
 }

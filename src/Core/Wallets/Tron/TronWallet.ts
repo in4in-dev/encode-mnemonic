@@ -1,5 +1,6 @@
 import Wallet20Interface from "../../Interfaces/Wallet20Interface";
 import TronContract from "./TronContract";
+import TransactionInterface from "../../Interfaces/TransactionInterface";
 let TronWeb = require('tronweb');
 
 export default class TronWallet implements Wallet20Interface<TronContract>
@@ -38,29 +39,47 @@ export default class TronWallet implements Wallet20Interface<TronContract>
         return this.tronWeb.contract(contract.abi, contract.address);
     }
 
-    public async sendTransaction(transaction : any) : Promise<string>
+    public async signTransaction(transaction : TransactionInterface) : Promise<any>
     {
+        return await this.tronWeb.trx.sign(transaction, this.privateKey);
+    }
 
-        let signedTransaction = await this.tronWeb.trx.sign(transaction, this.privateKey);
+    public async sendSignedTransaction(signedTransaction : any) : Promise<string>
+    {
         let result = await this.tronWeb.trx.sendRawTransaction(signedTransaction);
 
         return result.txid;
+    }
+
+    public async sendTransaction(transaction : TransactionInterface) : Promise<string>
+    {
+
+        return this.sendSignedTransaction(
+            await this.signTransaction(transaction)
+        )
 
     }
 
-    public async send(amount: number, toAddress: string) : Promise<string>
+    public async createSendTransaction(amount : number, toAddress : string) : Promise<TransactionInterface>
     {
-
         let transaction = await this.tronWeb.transactionBuilder.sendTrx(
             toAddress,
             Math.floor(amount * 1000000)
         );
 
-        return this.sendTransaction(transaction);
+        return transaction.transaction;
+    }
+
+    public async send(amount: number, toAddress: string) : Promise<string>
+    {
+
+        return this.sendTransaction(
+            await this.createSendTransaction(amount, toAddress)
+        );
 
     }
 
-    public async sendToken(contract : TronContract, amount : number, toAddress : string) : Promise<string>
+    public async createSendTokenTransaction(contract : TronContract, amount : number, toAddress : string) : Promise<TransactionInterface>
     {
 
         let transaction = await this.tronWeb.transactionBuilder.triggerSmartContract(
@@ -80,7 +99,15 @@ export default class TronWallet implements Wallet20Interface<TronContract>
             this.address
         );
 
-        return this.sendTransaction(transaction.transaction);
+        return transaction.transaction;
+    }
+
+    public async sendToken(contract : TronContract, amount : number, toAddress : string) : Promise<string>
+    {
+
+        return this.sendTransaction(
+            await this.createSendTokenTransaction(contract, amount, toAddress)
+        );
 
     }
 

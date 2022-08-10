@@ -2,6 +2,8 @@ import Wallet20Interface from "../../Interfaces/Wallet20Interface";
 import Web3 from "web3";
 import EthContract from "./EthContract";
 import { Contract, ContractSendMethod } from "web3-eth-contract";
+import TransactionInterface from "../../Interfaces/TransactionInterface";
+import {SignedTransaction} from "web3-core";
 
 export default class EthWallet implements Wallet20Interface<EthContract> {
 
@@ -42,38 +44,51 @@ export default class EthWallet implements Wallet20Interface<EthContract> {
 
     }
 
-    public async send(amount: number, toAddress: string): Promise<string> {
-
-        return this.sendTransaction({
+    public async createSendTransaction(amount : number, toAddress : string) : Promise<TransactionInterface>
+    {
+        return {
             to : toAddress,
             value : Math.floor(amount * 1000000000000000000)
-        });
+        }
+    }
+
+    public async createSendTokenTransaction(contract: EthContract, amount: number, toAddress: string) : Promise<TransactionInterface>
+    {
+
+        let contractEth = await this.getContractEth(contract);
+
+        let transfer = contractEth.methods.transfer(toAddress, amount * 1000000);
+
+        return {
+            from : this.address,
+            to : contract.address,
+            data: transfer.encodeABI(),
+        }
+
+    }
+
+    public async send(amount: number, toAddress: string): Promise<string> {
+
+        return this.sendTransaction(
+            await this.createSendTransaction(amount, toAddress)
+        );
 
     }
 
     public async sendToken(contract: EthContract, amount: number, toAddress: string): Promise<string> {
 
-        let contractEth = await this.getContractEth(contract);
-
-        let transfer = contractEth.methods.transfer(toAddress, amount * 1000000);
-        // let gas = await transfer.estimateGas({from : this.address});
-
-        return this.sendTransaction({
-            from : this.address,
-            to : contract.address,
-            data: transfer.encodeABI(),
-        });
+        return this.sendTransaction(
+            await this.createSendTokenTransaction(contract, amount, toAddress)
+        );
 
     }
 
-    public async sendTransaction(transaction : { [key:string] : any }) : Promise<string>
+    public async signTransaction(transaction : TransactionInterface) : Promise<SignedTransaction>
     {
-
-        // let gasPrice = await this.ethWeb.eth.getGasPrice();
 
         let gas = await this.ethWeb.eth.estimateGas(transaction);
 
-        let sign = await this.ethWeb.eth.accounts.signTransaction(
+        return await this.ethWeb.eth.accounts.signTransaction(
             {
                 gas,
                 // gasPrice,
@@ -82,9 +97,23 @@ export default class EthWallet implements Wallet20Interface<EthContract> {
             this.privateKey
         );
 
-        let receipt = await this.ethWeb.eth.sendSignedTransaction(sign.rawTransaction!);
+    }
+
+    public async sendSignedTransaction(signedTransaction : SignedTransaction) : Promise<string>
+    {
+
+        let receipt = await this.ethWeb.eth.sendSignedTransaction(signedTransaction.rawTransaction!);
 
         return receipt.transactionHash;
+
+    }
+
+    public async sendTransaction(transaction : TransactionInterface) : Promise<string>
+    {
+
+        return this.sendSignedTransaction(
+            await this.signTransaction(transaction)
+        );
 
     }
 
@@ -92,7 +121,5 @@ export default class EthWallet implements Wallet20Interface<EthContract> {
     {
         return new this.ethWeb.eth.Contract(contract.abi, contract.address);
     }
-
-
 
 }

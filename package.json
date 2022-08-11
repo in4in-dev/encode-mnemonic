@@ -17,12 +17,11 @@
   },
   "name": "encode-mnemonic-wallet",
   "description": "Even if your phrase is stolen from you, it will be useless without a password.",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "main": "public/index.js",
   "module": "public/index.js",
   "umd:main": "public/index.js",
-  "scripts": {
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/in4in-dev/encode-mnemonic.git"
@@ -33,8 +32,10 @@
   "bugs": {
     "url": "https://github.com/in4in-dev/encode-mnemonic/issues"
   },
-  "homepage" : "https://github.com/in4in-dev/encode-mnemonic#readme",
-  "files" : ["public"],
-  "prepare" : "tsc",
+  "homepage": "https://github.com/in4in-dev/encode-mnemonic#readme",
+  "files": [
+    "public"
+  ],
+  "prepare": "tsc",
   "types": "public/index.d.ts"
 }

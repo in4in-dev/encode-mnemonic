@@ -9,4 +9,7 @@ import TronWallet from "./Core/Wallets/Tron/TronWallet";
 
 import Wallet from "./Core/Wallet";
 
-export {Wallet, TronWallet, EthWallet, TronContract, EthContract, EthTokens, TronTokens}
+import Wallet20Interface from "./Core/Interfaces/Wallet20Interface";
+import Contract20Interface from "./Core/Interfaces/Contract20Interface";
+
+export {Wallet, TronWallet, EthWallet, TronContract, EthContract, EthTokens, TronTokens, Wallet20Interface, Contract20Interface}

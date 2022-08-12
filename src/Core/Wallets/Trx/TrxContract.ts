@@ -1,6 +1,6 @@
 import Contract20Interface from "../../Interfaces/Contract20Interface";
 
-export default class TronContract implements Contract20Interface
+export default class TrxContract implements Contract20Interface
 {
 
     public address;

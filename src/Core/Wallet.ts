@@ -2,28 +2,24 @@ import Web3 from 'web3';
 import Bip32 from "./Bip32";
 import * as Bip39 from "bip39";
 import CryptoJS from "crypto-js";
-import WalletInfoInterface from "./Interfaces/WalletInfoInterface";
-import TronWallet from "./Wallets/Tron/TronWallet";
+import TrxWallet from "./Wallets/Trx/TrxWallet";
 import EthWallet from "./Wallets/Eth/EthWallet";
+import BscWallet from "./Wallets/Bsc/BscWallet";
+import WalletInfo from "./WalletInfo";
 
 export default class Wallet {
 
     public privateKey : string;
-    public trx : TronWallet;
+    public trx : TrxWallet;
     public eth : EthWallet;
-    // public bsc;
+    public bsc : BscWallet;
 
     public constructor(privateKey : string) {
         this.privateKey = privateKey;
 
-        this.trx = new TronWallet(privateKey);
+        this.trx = new TrxWallet(privateKey);
         this.eth = new EthWallet(privateKey);
-    }
-
-    public getBscAddress() : string
-    {
-        // return this.getEthAddress();
-        return '';
+        this.bsc = new BscWallet(privateKey);
     }
 
     public static generateMnemonic() : string
@@ -78,37 +74,25 @@ export default class Wallet {
         return CryptoJS.HmacSHA512(mnemonic, password).toString();
     }
 
-    public static async createWallet() : Promise<WalletInfoInterface>
+    public static async createWallet() : Promise<WalletInfo>
     {
 
         let mnemonic = this.generateMnemonic();
 
         let wallet = await this.fromMnemonic(mnemonic);
 
-        return {
-            mnemonic,
-            privateKey : wallet.privateKey,
-            trxAddress : wallet.trx.address,
-            bscAddress : wallet.getBscAddress(),
-            ethAddress : wallet.eth.address
-        }
+        return new WalletInfo(mnemonic, wallet);
 
     }
 
-    public static async createProtectedWallet(password : string) : Promise<WalletInfoInterface>
+    public static async createProtectedWallet(password : string) : Promise<WalletInfo>
     {
 
         let mnemonic = this.generateMnemonic();
 
         let wallet = await this.fromProtectedMnemonic(mnemonic, password);
 
-        return {
-            mnemonic,
-            privateKey : wallet.privateKey,
-            trxAddress : wallet.trx.address,
-            bscAddress : wallet.getBscAddress(),
-            ethAddress : wallet.eth.address
-        }
+        return new WalletInfo(mnemonic, wallet);
 
     }
 

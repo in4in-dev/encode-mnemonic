@@ -1,9 +1,9 @@
 import Wallet20Interface from "../../Interfaces/Wallet20Interface";
-import TronContract from "./TronContract";
+import TrxContract from "./TrxContract";
 import TransactionInterface from "../../Interfaces/TransactionInterface";
 let TronWeb = require('tronweb');
 
-export default class TronWallet implements Wallet20Interface<TronContract>
+export default class TrxWallet implements Wallet20Interface<TrxContract>
 {
 
     public privateKey : string;
@@ -34,7 +34,7 @@ export default class TronWallet implements Wallet20Interface<TronContract>
 
     }
 
-    protected getTrxContract(contract : TronContract) : any
+    protected getTrxContract(contract : TrxContract) : any
     {
         return this.tronWeb.contract(contract.abi, contract.address);
     }
@@ -79,7 +79,7 @@ export default class TronWallet implements Wallet20Interface<TronContract>
 
     }
 
-    public async createSendTokenTransaction(contract : TronContract, amount : number, toAddress : string) : Promise<TransactionInterface>
+    public async createSendTokenTransaction(contract : TrxContract, amount : number, toAddress : string) : Promise<TransactionInterface>
     {
 
         let transaction = await this.tronWeb.transactionBuilder.triggerSmartContract(
@@ -102,7 +102,7 @@ export default class TronWallet implements Wallet20Interface<TronContract>
         return transaction.transaction;
     }
 
-    public async sendToken(contract : TronContract, amount : number, toAddress : string) : Promise<string>
+    public async sendToken(contract : TrxContract, amount : number, toAddress : string) : Promise<string>
     {
 
         return this.sendTransaction(
@@ -118,7 +118,7 @@ export default class TronWallet implements Wallet20Interface<TronContract>
         return balance / 1000000;
     }
 
-    public async getBalanceToken(contract : TronContract): Promise<number>
+    public async getBalanceToken(contract : TrxContract): Promise<number>
     {
 
         let contractTrx = await this.getTrxContract(contract);

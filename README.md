@@ -76,17 +76,17 @@ Wallet.fromMnemonic(mnemonic : string) : Promise<Wallet>;
 Wallet.fromProtectedMnemonic(mnemonic : string, password : string) : string;
 ```
 ```typescript
-Wallet.createWallet() : Promise<Wallet>;
+Wallet.createWallet() : Promise<WalletInfo>;
 ```
 ```typescript
-Wallet.createProtectedWallet(password : string) : Promise<Wallet>;
+Wallet.createProtectedWallet(password : string) : Promise<WalletInfo>;
 ```
 
 
 <a name="methods"></a>
 ## Wallets Methods
 ```typescript
-let wallet = Wallet.createWallet();
+let wallet = Wallet.fromMnemonic('...');
 ```
 For access to this methods - you must use
 

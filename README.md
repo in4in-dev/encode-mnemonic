@@ -43,7 +43,7 @@ For access to this methods - you must use
 
 ``wallet.trx.[method]``
 ``wallet.bsc.[method]`` 
-``wallet.bsc.[method]``
+``wallet.eth.[method]``
 
 ```typescript
 send(amount : number, toAddress : string) : Promise<string>;

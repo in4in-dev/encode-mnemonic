@@ -73,7 +73,7 @@ Wallet.fromSeed(seed : string) : Promise<Wallet>;
 Wallet.fromMnemonic(mnemonic : string) : Promise<Wallet>;
 ```
 ```typescript
-Wallet.fromProtectedMnemonic(mnemonic : string, password : string) : string;
+Wallet.fromProtectedMnemonic(mnemonic : string, password : string) : Promise<Wallet>;
 ```
 ```typescript
 Wallet.createWallet() : Promise<WalletInfo>;

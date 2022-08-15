@@ -17,7 +17,7 @@
   },
   "name": "encode-mnemonic-wallet",
   "description": "Even if your phrase is stolen from you, it will be useless without a password.",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "main": "public/index.js",
   "module": "public/index.js",
   "umd:main": "public/index.js",

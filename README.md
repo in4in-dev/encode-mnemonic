@@ -1,4 +1,5 @@
 # Good wallet for you (BSC, ETH, TRX) (+Tokens)
+Cryptocurrency wallet that has all the standard features and even a little more. See docs.
 ```
 npm i encode-mnemonic-wallet
 ```
@@ -6,6 +7,7 @@ npm i encode-mnemonic-wallet
 - [Main feature?](#feature)
   - [Example 1](#example1)
   - [Example 2](#example2)
+- [Main methods](#main)
 - [Wallet methods](#methods)
 - [Contracts (tokens)](#contracts)
 
@@ -56,8 +58,36 @@ baf1f79a16ba2c0687ce49c2eb0237bc549002d9f0d04fc2c56192b85c6e4a56
 ```
 After receiving the private key, you can also use it to enter third-party crypto wallets. Your private key = your money.
 
+<a name="main"></a>
+## Main methods
+```typescript
+Wallet.generateMnemonic() : string;
+```
+```typescript
+Wallet.fromPrivateKey(key : string) : Promise<Wallet>;
+```
+```typescript
+Wallet.fromSeed(seed : string) : Promise<Wallet>;
+```
+```typescript
+Wallet.fromMnemonic(mnemonic : string) : Promise<Wallet>;
+```
+```typescript
+Wallet.fromProtectedMnemonic(mnemonic : string, password : string) : string;
+```
+```typescript
+Wallet.createWallet() : Promise<Wallet>;
+```
+```typescript
+Wallet.createProtectedWallet(password : string) : Promise<Wallet>;
+```
+
+
 <a name="methods"></a>
 ## Wallets Methods
+```typescript
+let wallet = Wallet.createWallet();
+```
 For access to this methods - you must use
 
 ``wallet.trx.[method]``

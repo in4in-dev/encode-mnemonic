@@ -8,7 +8,7 @@ export default class TrxContract implements Contract20Interface
 
     constructor(address : string, abi : any) {
         this.address = address;
-        this.abi = abi;
+        this.abi = ('entrys' in abi) ? abi.entrys : abi;
     }
 
 }
